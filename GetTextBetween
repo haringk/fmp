@@ -1,0 +1,31 @@
+/* Copyright Ulf Carlsson, ulf.carlsson@studentlitteratur.se ( Free to use if you don't delete this line )
+
+Function: GetTextBetween
+Parameters:
+  text          --  the text to parse
+  from          --  get all text after this text
+  to            --  get all text to this string
+  occurrence    -- get the nth occuernce in the text
+
+*/
+
+Let ( [
+    occurrence = If (
+      IsEmpty ( occurrence ) or  occurrence  ≤ 0 ; 1 ;    // If occerence isn't 1 or more, set it to one
+      Int ( occurrence ) ) ;
+
+    startPos = If (
+      IsEmpty ( from ) ; 1 ;      // If parameter "from" is empty start from the very begining
+      Position ( text ; from ; 1 ; occurrence ) + Length ( from ) ) ;
+
+    endPos =  If (
+      IsEmpty ( to ) ; Length ( text ) ;  // If parameter "to" is empty include to the very end
+      Position ( text ; to ; startPos ; 1 ) )
+
+ ] ; 
+  Case ( 
+    startPos = Length ( from ) ; "" ;  //  "from" is not found in the text, this should return an empty string
+    endPos = startPos ; "" ;              //  "to" is not found in the text,  this should return an empty string
+    Middle ( text ; startPos ; endPos - startPos ) // Otherwise return string
+  )
+)
